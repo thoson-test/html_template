@@ -7,15 +7,27 @@
 
 <body>
     <h1 id="hello">Hello WebView</h1>
+    <p id="time"></p>
+
     <script>
+        // Hàm đổi text khi Flutter gọi
         function changeText(msg) {
             document.getElementById("hello").innerText = msg;
             return "Changed!";
         }
+
+        // Lắng nghe message từ Flutter
         window.addEventListener("message", (event) => {
             console.log("Received message from Flutter:", event.data);
             document.getElementById("hello").innerText = JSON.stringify(event.data);
         });
+
+        // Hiển thị giờ khi load trang
+        window.onload = function () {
+            const now = new Date();
+            document.getElementById("time").innerText =
+                "Current time: " + now.toLocaleTimeString();
+        };
     </script>
 </body>
 
