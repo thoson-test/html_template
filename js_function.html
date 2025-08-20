@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test Page</title>
+</head>
+
+<body>
+    <h1 id="hello">Hello WebView</h1>
+    <script>
+        function changeText(msg) {
+            document.getElementById("hello").innerText = msg;
+            return "Changed!";
+        }
+        window.addEventListener("message", (event) => {
+            console.log("Received message from Flutter:", event.data);
+            document.getElementById("hello").innerText = JSON.stringify(event.data);
+        });
+    </script>
+</body>
+
+</html>
