@@ -9,8 +9,9 @@
 	<title>Test</title>
 </head>
 <body style="background: var(--background-color);">
-	<h1 id="message">None</h1>
-	<h1 id="message_data">None</h1>
+	<h1 id="message">message</h1>
+	<h1 id="message_data">message_data</h1>
+	<h2 id="wf_access_token">wf_access_token</h2>
 	<script>
 		// --- Utility ---
 		function isEmpty(value, allowEmptyString) {
@@ -46,6 +47,8 @@
 			const wf_header_background_color   = isEmpty(data.message?.wf_header_background_color) ? "" : data.message.wf_header_background_color;
 			const wf_tab_url                   = isEmpty(data.message?.wf_tab_url) ? "" : data.message.wf_tab_url;
 
+			
+			document.getElementById("wf_access_token").innerText = wf_access_token;
 			// Save to localStorage
 			localStorage.setItem("wf_access_token", wf_access_token);
 			localStorage.setItem("wf_refresh_token", wf_refresh_token);
