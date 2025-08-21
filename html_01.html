@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Standard Meta -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<!-- 画面タイトル -->
+	<title>Test</title>
+</head>
+<body style="background: var(--background-color);">
+	<div id="spinner" class="box">
+		<div class="spinner type1">
+			<span>Loading...</span>
+		</div>
+	</div>
+
+	<script>
+		// --- Utility ---
+		function isEmpty(value, allowEmptyString) {
+			return (
+				value === null ||
+				value === undefined ||
+				(!allowEmptyString ? value === '' : false) ||
+				(toString.call(value) === '[object Array]' && value.length === 0)
+			);
+		}
+
+		// --- Message Handler ---
+		function onMessage(e) {
+			const data = e.data;
+
+			console.log("📩 Message event received:", data);
+
+			if (!data) {
+				console.warn("⚠ No data received in message event.");
+				return;
+			}
+
+			// Extract values safely
+			const wf_access_token              = isEmpty(data.message?.wf_access_token) ? "" : data.message.wf_access_token;
+			const wf_refresh_token             = isEmpty(data.message?.wf_refresh_token) ? "" : data.message.wf_refresh_token;
+			const wf_env_base_url              = isEmpty(data.message?.wf_env_base_url) ? "" : data.message.wf_env_base_url;
+			const wf_api_base_url              = isEmpty(data.message?.wf_api_base_url) ? "" : data.message.wf_api_base_url;
+			const wf_api_key                   = isEmpty(data.message?.wf_api_key) ? "" : data.message.wf_api_key;
+			const wf_language                  = isEmpty(data.message?.wf_language) ? "" : data.message.wf_language;
+			const wf_header_background_color   = isEmpty(data.message?.wf_header_background_color) ? "" : data.message.wf_header_background_color;
+			const wf_tab_url                   = isEmpty(data.message?.wf_tab_url) ? "" : data.message.wf_tab_url;
+
+			// Save to localStorage
+			localStorage.setItem("wf_access_token", wf_access_token);
+			localStorage.setItem("wf_refresh_token", wf_refresh_token);
+			localStorage.setItem("wf_env_base_url", wf_env_base_url);
+			localStorage.setItem("wf_api_base_url", wf_api_base_url);
+			localStorage.setItem("wf_api_key", wf_api_key);
+			localStorage.setItem("wf_language", wf_language);
+			localStorage.setItem("wf_header_background_color", wf_header_background_color);
+			localStorage.setItem("wf_tab_url", wf_tab_url);
+
+			console.log("✅ Saved parameters to localStorage:", {
+				wf_access_token,
+				wf_refresh_token,
+				wf_env_base_url,
+				wf_api_base_url,
+				wf_api_key,
+				wf_language,
+				wf_header_background_color,
+				wf_tab_url
+			});
+
+			// Remove listener after handling once
+			window.removeEventListener('message', onMessage);
+
+			// Reset user info
+			localStorage.setItem("wf_user_info", "");
+			console.log("🗑️ Cleared wf_user_info");
+
+			// Redirect to initial page
+			console.log("➡️ Redirecting to ./system/workflowlist/workflowlist.html");
+			window.location.replace('./system/workflowlist/workflowlist.html');
+
+			// Hide spinner
+			document.getElementById("spinner").classList.add('loaded');
+		}
+
+		// Listen for messages from employee app
+		window.addEventListener('message', onMessage, false);
+	</script>
+</body>
+</html>
